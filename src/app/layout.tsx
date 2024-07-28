@@ -24,6 +24,7 @@ export default function RootLayout({
     <html lang='en'>
       <body
         className={cn('min-h-screen font-sans antialiased', jakarta.variable)}
+        suppressHydrationWarning={true}
       >
         <ThemeProvider
           attribute='class'

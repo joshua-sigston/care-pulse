@@ -3,14 +3,13 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
-import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import FormFieldComponent from '../form-field-component';
 import SubmitButton from '../submit-buton';
 import { useState } from 'react';
 import { UserFormValidation } from '@/lib/validation';
 import { useRouter } from 'next/navigation';
+import { createUser, getUser } from '@/lib/actions/patient.actions';
 
 export enum FormFieldType {
   INPUT = 'input',
@@ -36,27 +35,28 @@ export function PatientForm() {
   });
 
   // 2. Define a submit handler.
-  async function onSubmit({
-    name,
-    email,
-    phone,
-  }: z.infer<typeof UserFormValidation>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+  const onSubmit = async (values: z.infer<typeof UserFormValidation>) => {
     setIsLoading(true);
 
     try {
-      const userData = { name, email, phone };
-      console.log(userData);
-      // const user = await createUser(user)
+      const user = {
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
+      };
 
-      // if (user) {
-      //   router.push(`/patients/${user.$id}/register`)
-      // }
+      const newUser = await createUser(user);
+      // console.log(newUser);
+
+      if (newUser) {
+        router.push(`/patients/${newUser?.$id}/register`);
+      }
     } catch (error) {
       console.log(error);
     }
-  }
+
+    setIsLoading(false);
+  };
 
   return (
     <Form {...form}>
@@ -92,6 +92,7 @@ export function PatientForm() {
           label='Phone number'
           placeholder='(555) 123-4567'
         />
+
         <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
       </form>
     </Form>
