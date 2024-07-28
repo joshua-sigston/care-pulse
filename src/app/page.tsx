@@ -1,26 +1,22 @@
-import PatientForm from '@/components/forms/patient-form';
+import { PatientForm } from '@/components/forms/patient-form';
 import { Button } from '@/components/ui/button';
+import { HeartPulse } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Home() {
   return (
     <main className='flex h-screen max-h-screen'>
-      <section className='remove-scrollbar container my-auto'>
-        <div className='sub-container max-w-[496px]'>
-          <Image
-            src='/assets/icons/logo-full.svg'
-            height={1000}
-            width={1000}
-            alt='patient'
-            className='mb-12 h-10 w-fit'
-          />
+      <section className='container'>
+        <div className='max-w-[496px] mx-auto'>
+          <div className='flex items-center space-x-3 py-5'>
+            <HeartPulse />
+            <p className='text-lg font-semibold'>CarePulse</p>
+          </div>
           <PatientForm />
           <div className='text-14-regular mt-20 flex justify-between'>
-            <p className='justify-items-end text-dark-500 xl:text-left'>
-              © 2024 CarePluse
-            </p>
-            <Link href='/?admin=true' className='text-green-500'>
+            <p className='justify-items-end xl:text-left'>© 2024 CarePluse</p>
+            <Link href='/?admin=true' className=''>
               Admin
             </Link>
           </div>
@@ -31,7 +27,7 @@ export default function Home() {
         height={1000}
         width={1000}
         alt='patient'
-        className='side-img max-w-[50%]'
+        className='max-w-[50%] object-cover hidden md:block'
       />
     </main>
   );
