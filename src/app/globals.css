@@ -96,7 +96,7 @@
 
   /* ==== FORM */
   .radio-group {
-    @apply flex h-full flex-1 items-center gap-2 rounded-md border border-dashed border-dark-500 bg-dark-400 p-3;
+    @apply flex h-full flex-1 items-center gap-2 rounded-md border border-black bg-slate-50 shadow-sm p-3;
   }
 
   .checkbox-label {
@@ -219,11 +219,11 @@
   }
 
   .shad-select-trigger {
-    @apply bg-dark-400  placeholder:text-dark-600 border-dark-500 h-11 focus:ring-0 focus:ring-offset-0 !important;
+    @apply placeholder:text-dark-600 border-dark-500 h-11 focus:ring-0 focus:ring-offset-0 !important;
   }
 
   .shad-select-content {
-    @apply bg-dark-400 border-dark-500 !important;
+    @apply bg-slate-100 border-dark-500 !important;
   }
 
   .shad-dialog {
@@ -312,9 +312,11 @@
 }
 
 .react-datepicker__input-container input {
-  background-color: #1a1d21 !important;
+  background-color: #e3e5e7 !important;
   width: 100%;
   outline: none;
+  border-radius: 0.3rem;
+  height: 2rem;
 }
 
 .react-datepicker__day--selected {

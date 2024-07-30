@@ -3,6 +3,7 @@ import { Query, ID } from 'node-appwrite';
 import { users } from '../appwrite.config';
 import { parseStringify } from '../utils';
 
+// CREATE USER
 export const createUser = async (user: CreateUserParams) => {
   console.log(user);
   try {
