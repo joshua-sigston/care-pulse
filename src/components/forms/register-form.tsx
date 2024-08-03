@@ -7,12 +7,17 @@ import { Form, FormControl } from '@/components/ui/form';
 import FormFieldComponent from '../form-field-component';
 import SubmitButton from '../submit-buton';
 import { useState } from 'react';
-import { UserFormValidation } from '@/lib/validation';
+import { PatientFormValidation, UserFormValidation } from '@/lib/validation';
 import { useRouter } from 'next/navigation';
-import { createUser } from '@/lib/actions/patient.actions';
+import { registerPatient } from '@/lib/actions/patient.actions';
 import { FormFieldType } from './patient-form';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
-import { Doctors, genderOptions, IdentificationTypes } from '@/constants';
+import {
+  Doctors,
+  genderOptions,
+  IdentificationTypes,
+  PatientFormDefaultValues,
+} from '@/constants';
 import { Label } from '../ui/label';
 import { SelectItem } from '../ui/select';
 import Image from 'next/image';
@@ -22,32 +27,49 @@ export function RegisterForm({ user }: { user: User }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   // 1. Define your form.
-  const form = useForm<z.infer<typeof UserFormValidation>>({
-    resolver: zodResolver(UserFormValidation),
+
+  const form = useForm<z.infer<typeof PatientFormValidation>>({
+    resolver: zodResolver(PatientFormValidation),
     defaultValues: {
-      name: '',
-      email: '',
-      phone: '',
+      ...PatientFormDefaultValues,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
     },
   });
 
   // 2. Define a submit handler.
-  const onSubmit = async (values: z.infer<typeof UserFormValidation>) => {
+  const onSubmit = async (values: z.infer<typeof PatientFormValidation>) => {
     setIsLoading(true);
 
+    console.log(values);
+    let formData;
+
+    if (
+      values.identificationDocument &&
+      values.identificationDocument.length > 0
+    ) {
+      const blobFile = new Blob([values.identificationDocument[0]], {
+        type: values.identificationDocument[0].type,
+      });
+
+      formData = new FormData();
+      formData.append('blobFile', blobFile);
+      formData.append('fileName', values.identificationDocument[0].name);
+    }
+
     try {
-      const user = {
-        name: values.name,
-        email: values.email,
-        phone: values.phone,
+      const patientData = {
+        ...values,
+        userId: user.$id,
+        birthDate: new Date(values.birthDate),
+        identificationDocument: formData,
       };
 
-      const newUser = await createUser(user);
-      // console.log(newUser);
-
-      if (newUser) {
-        router.push(`/patients/${newUser?.$id}/register`);
-      }
+      //@ts-ignore
+      const patient = await registerPatient(patientData);
+      console.log(patient);
+      if (patient) router.push(`/patients/${user.$id}/new-appointment`);
     } catch (error) {
       console.log(error);
     }
@@ -150,7 +172,7 @@ export function RegisterForm({ user }: { user: User }) {
             <FormFieldComponent
               control={form.control}
               fieldType={FormFieldType.INPUT}
-              name='emergencyContact'
+              name='emergencyContactName'
               label='Emergency Contact'
               placeholder='Guardians Name'
             />
@@ -228,14 +250,14 @@ export function RegisterForm({ user }: { user: User }) {
             <FormFieldComponent
               control={form.control}
               fieldType={FormFieldType.TEXTAREA}
-              name='familyHistory'
+              name='familyMedicalHistory'
               label='Family Medical History'
               placeholder='Mother: Lung Cancer'
             />
             <FormFieldComponent
               control={form.control}
               fieldType={FormFieldType.TEXTAREA}
-              name='medicalHistory'
+              name='pastMedicalHistory'
               label='Your Medical History'
               placeholder='Measels, Surgey for back pain...'
             />
@@ -279,6 +301,7 @@ export function RegisterForm({ user }: { user: User }) {
             )}
           />
         </section>
+        {/* Consent Section */}
         <section className='space-y-4'>
           <div>
             <h2 className='tracking-wide font-bold text-lg'>
