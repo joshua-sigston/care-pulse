@@ -7,7 +7,7 @@ import Link from 'next/link';
 export default function Home() {
   return (
     <main className='flex h-screen max-h-screen'>
-      <section className='container remove-scrollbar '>
+      <section className='container remove-scrollbar'>
         <div className='max-w-[496px] mx-auto'>
           <div className='flex items-center space-x-3 py-5'>
             <HeartPulse />

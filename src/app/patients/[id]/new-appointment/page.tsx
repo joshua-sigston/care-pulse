@@ -4,10 +4,11 @@ import { HeartPulse } from 'lucide-react';
 import Image from 'next/image';
 
 export default async function NewAppointment({
-  params: { userId },
+  params: { id },
 }: SearchParamProps) {
-  const patient = await getPatient(userId);
-  console.log(patient);
+  // console.log(id);
+  const patient = await getPatient(id);
+  // console.log(patient);
   return (
     <main className='flex h-screen max-h-screen'>
       <section className='container remove-scrollbar '>
@@ -16,11 +17,7 @@ export default async function NewAppointment({
             <HeartPulse />
             <p className='text-lg font-semibold'>CarePulse</p>
           </div>
-          <AppointmentForm
-            type='create'
-            userId={userId}
-            patientId={patient.$id}
-          />
+          <AppointmentForm type='create' userId={id} patientId={patient.$id} />
 
           <p className='justify-items-end xl:text-left'>© 2024 CarePluse</p>
         </div>
