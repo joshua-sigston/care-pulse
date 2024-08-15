@@ -227,7 +227,7 @@
   }
 
   .shad-dialog {
-    @apply bg-dark-400 border-dark-500 !important;
+    @apply bg-white border-dark-500 !important;
   }
 
   .shad-dialog button {
@@ -259,7 +259,7 @@
   }
 
   .shad-alert-dialog {
-    @apply space-y-5 bg-dark-400 border-dark-500 outline-none !important;
+    @apply space-y-5 bg-stone-100 border-dark-500 outline-none !important;
   }
 
   .shad-sheet-content button {

@@ -1,12 +1,16 @@
 import { PatientForm } from '@/components/forms/patient-form';
+import PassKeyModal from '@/components/passkey-modal';
 import { Button } from '@/components/ui/button';
 import { HeartPulse } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function Home() {
+export default function Home({ searchParams }: SearchParamProps) {
+  const isAdmin = searchParams.admin === 'true';
+  console.log(isAdmin);
   return (
     <main className='flex h-screen max-h-screen'>
+      {isAdmin && <PassKeyModal />}
       <section className='container remove-scrollbar'>
         <div className='max-w-[496px] mx-auto'>
           <div className='flex items-center space-x-3 py-5'>
