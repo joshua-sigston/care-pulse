@@ -12,7 +12,7 @@ import { Button } from './ui/button';
 import { AppointmentForm } from './forms/appointment-form';
 import { Appointment } from '@/types/appwrite.types';
 
-export function AppointmentModal({
+export const AppointmentModal = ({
   patientId,
   userId,
   appointment,
@@ -24,9 +24,9 @@ export function AppointmentModal({
   type: 'schedule' | 'cancel';
   title: string;
   description: string;
-}) {
+}) => {
   const [open, setOpen] = useState(false);
-
+  console.log(type);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -39,13 +39,12 @@ export function AppointmentModal({
       </DialogTrigger>
       <DialogContent className='shad-dialog sm:max-w-md'>
         <DialogHeader className='mb-4 space-y-3'>
-          <DialogTitle className='capitalize text-dark-400'>
-            {type} Appointment
-          </DialogTitle>
+          <DialogTitle className='capitalize'>{type} Appointment</DialogTitle>
           <DialogDescription>
-            Please fill in the following details to {type} an appointment
+            Please fill in the following details to {type} appointment
           </DialogDescription>
         </DialogHeader>
+
         <AppointmentForm
           userId={userId}
           patientId={patientId}
@@ -56,4 +55,4 @@ export function AppointmentModal({
       </DialogContent>
     </Dialog>
   );
-}
+};

@@ -97,6 +97,7 @@ export const updateAppointment = async ({
   appointment,
   type,
 }: UpdateAppointmentParams) => {
+  console.log('updatedAppointment function');
   try {
     // Update appointment to scheduled -> https://appwrite.io/docs/references/cloud/server-nodejs/databases#updateDocument
     const updatedAppointment = await databases.updateDocument(
@@ -105,7 +106,7 @@ export const updateAppointment = async ({
       appointmentId,
       appointment
     );
-
+    console.log(appointment);
     if (!updatedAppointment) throw Error;
 
     // const smsMessage = `Greetings from CarePulse. ${

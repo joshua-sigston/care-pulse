@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 export default function Home({ searchParams }: SearchParamProps) {
   const isAdmin = searchParams.admin === 'true';
-  console.log(isAdmin);
+  // console.log(isAdmin);
   return (
     <main className='flex h-screen max-h-screen'>
       {isAdmin && <PassKeyModal />}

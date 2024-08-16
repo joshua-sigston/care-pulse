@@ -51,73 +51,56 @@ export function AppointmentForm({
     },
   });
 
-  let buttonLabel;
-
-  switch (type) {
-    case 'cancel':
-      buttonLabel = 'Cancel Appointment';
-      break;
-    case 'create':
-      buttonLabel = 'Create Appointment';
-      break;
-    case 'schedule':
-      buttonLabel = 'Schedule Appointment';
-    default:
-      break;
-  }
-
-  // 2. Define a submit handler.
   const onSubmit = async (
     values: z.infer<typeof AppointmentFormValidation>
   ) => {
     setIsLoading(true);
-    console.log('onSubmit');
 
     let status;
-
     switch (type) {
+      case 'schedule':
+        status = 'scheduled';
+        break;
       case 'cancel':
         status = 'cancelled';
         break;
-      case 'schedule':
-        status = 'schedule';
       default:
         status = 'pending';
-        break;
     }
-    console.log(type);
+
     try {
       if (type === 'create' && patientId) {
-        const appointmentData = {
+        const appointment = {
           userId,
           patient: patientId,
           primaryPhysician: values.primaryPhysician,
           schedule: new Date(values.schedule),
           reason: values.reason!,
-          notes: values.notes,
           status: status as Status,
+          notes: values.notes,
         };
-        const appointment = await createAppointment(appointmentData);
 
-        if (appointment) {
+        const newAppointment = await createAppointment(appointment);
+
+        if (newAppointment) {
           form.reset();
           router.push(
-            `/patients/${userId}/new-appointment/success?appointmentId=${appointment.$id}`
+            `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`
           );
         }
       } else {
-        console.log(type);
         const appointmentToUpdate = {
           userId,
           appointmentId: appointment?.$id!,
           appointment: {
-            primaryPhysician: values?.primaryPhysician,
-            schedule: new Date(values?.schedule),
+            primaryPhysician: values.primaryPhysician,
+            schedule: new Date(values.schedule),
             status: status as Status,
-            cancellationReason: values?.cancellationReason,
+            cancellationReason: values.cancellationReason,
           },
           type,
         };
+
         const updatedAppointment = await updateAppointment(appointmentToUpdate);
 
         if (updatedAppointment) {
@@ -128,9 +111,20 @@ export function AppointmentForm({
     } catch (error) {
       console.log(error);
     }
-
     setIsLoading(false);
   };
+
+  let buttonLabel;
+  switch (type) {
+    case 'cancel':
+      buttonLabel = 'Cancel Appointment';
+      break;
+    case 'schedule':
+      buttonLabel = 'Schedule Appointment';
+      break;
+    default:
+      buttonLabel = 'Submit Apppointment';
+  }
 
   return (
     <Form {...form}>

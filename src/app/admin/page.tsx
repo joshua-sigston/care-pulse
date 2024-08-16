@@ -10,7 +10,7 @@ export default async function AdminPage() {
   const appointments = await getRecentAppointmentList();
   // console.log(appointments);
   return (
-    <main className='mx-auto flex max-w-7xl flex-col space-y-14'>
+    <main className='mx-auto flex max-w-7xl flex-col space-y-14 bg-slate-50'>
       <header className='admin-header'>
         <Link href='/' className='cursor-pointer'>
           <Image

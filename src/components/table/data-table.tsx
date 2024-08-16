@@ -37,9 +37,9 @@ export function DataTable<TData, TValue>({
   return (
     <div className='rounded-md border max-w-[1000px] mx-auto'>
       <Table className='shad-table'>
-        <TableHeader className='bg-dark-200'>
+        <TableHeader className='bg-white'>
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id} className='shad-rable-row-header'>
+            <TableRow key={headerGroup.id} className='shad-table-row-header'>
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead key={header.id}>

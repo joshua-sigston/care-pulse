@@ -37,17 +37,17 @@ export function PatientForm() {
   // 2. Define a submit handler.
   const onSubmit = async (values: z.infer<typeof UserFormValidation>) => {
     setIsLoading(true);
-
+    console.log('patient form');
+    console.log(values);
     try {
       const user = {
         name: values.name,
         email: values.email,
         phone: values.phone,
       };
-
+      console.log(user);
       const newUser = await createUser(user);
-      // console.log(newUser);
-
+      console.log(newUser);
       if (newUser) {
         router.push(`/patients/${newUser?.$id}/register`);
       }
