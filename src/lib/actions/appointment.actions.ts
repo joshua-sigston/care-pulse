@@ -7,10 +7,11 @@ import {
   DATABASE_ID,
   databases,
   ENDPOINT,
+  messaging,
   PATIENT_COLLECTION_ID,
   PROJECT_ID,
 } from '../appwrite.config';
-import { parseStringify } from '../utils';
+import { parseStringify, formatDateTime } from '../utils';
 import { Appointment } from '@/types/appwrite.types';
 import { revalidatePath } from 'next/cache';
 
@@ -109,6 +110,15 @@ export const updateAppointment = async ({
     console.log(appointment);
     if (!updatedAppointment) throw Error;
 
+    const smsMessage = `Hi, its Care Pulse.
+    ${
+      type === 'schedule'
+        ? `Your appointment has been scheduled from ${
+            formatDateTime(appointment.schedule!).dateTime
+          } with Doctor ${appointment.primaryPhysician}`
+        : `We reget to inform you that your appointment has been cancelled for the following reason: ${appointment.cancellationReason}`
+    }`;
+
     // const smsMessage = `Greetings from CarePulse. ${
     //   type === 'schedule'
     //     ? `Your appointment is confirmed for ${
@@ -118,11 +128,26 @@ export const updateAppointment = async ({
     //         formatDateTime(appointment.schedule!, timeZone).dateTime
     //       } is cancelled. Reason:  ${appointment.cancellationReason}`
     // }.`;
-    // await sendSMSNotification(userId, smsMessage);
+    await sendSMSNotification(userId, smsMessage);
 
     revalidatePath('/admin');
     return parseStringify(updatedAppointment);
   } catch (error) {
     console.error('An error occurred while scheduling an appointment:', error);
+  }
+};
+
+export const sendSMSNotification = async (userId: string, content: string) => {
+  try {
+    const message = await messaging.createSms(
+      ID.unique(),
+      content,
+      [],
+      [userId]
+    );
+
+    return parseStringify(message);
+  } catch (error) {
+    console.error(error);
   }
 };

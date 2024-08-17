@@ -2,6 +2,7 @@ import { AppointmentForm } from '@/components/forms/appointment-form';
 import { getPatient } from '@/lib/actions/patient.actions';
 import { HeartPulse } from 'lucide-react';
 import Image from 'next/image';
+import * as Sentry from '@sentry/nextjs';
 
 export default async function NewAppointment({
   params: { id },
@@ -9,6 +10,7 @@ export default async function NewAppointment({
   // console.log(id);
   const patient = await getPatient(id);
   // console.log(patient);
+  Sentry.metrics.set('user_view_new_appointment', patient.name);
   return (
     <main className='flex h-screen max-h-screen'>
       <section className='container remove-scrollbar '>

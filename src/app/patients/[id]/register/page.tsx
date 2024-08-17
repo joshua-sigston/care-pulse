@@ -1,6 +1,7 @@
 import { RegisterForm } from '@/components/forms/register-form';
 import { getUser } from '@/lib/actions/patient.actions';
 import { HeartPulse } from 'lucide-react';
+import * as Sentry from '@sentry/nextjs';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -9,6 +10,11 @@ export default async function UserRegistration({
   params: { id },
 }: SearchParamProps) {
   const user = await getUser(id);
+
+  // Add 'jane' to a set
+  // used for tracking the number of users that viewed a page.
+  Sentry.metrics.set('user_view_register', user.name);
+
   return (
     <main className='flex h-screen max-h-screen'>
       <section className='container'>
